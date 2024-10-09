@@ -44,20 +44,20 @@ const weapons = [
 
 const monsters = [
   {
-  name:"slime",
+    name: "slime",
     level: 2,
     health: 15
-},
-{
-  name:"fanged beast",
+  },
+  {
+    name: "fanged beast",
     level: 8,
     health: 60
-},
-{
-  name:"dragon",
+  },
+  {
+    name: "dragon",
     level: 20,
     health: 300
-}
+  }
 ]
 
 
@@ -82,10 +82,16 @@ const locations = [
     text: "You enter the cave. You see some monsters."
   },
   {
-    name:"fight",
+    name: "fight",
     "button text": ["Attack", "Dodge", "Run"],
     "button functions": [attack, dodge, goTown],
     text: "You are fighting a monster."
+  },
+  {
+    name: "kill monster",
+    "button text": ["Go to town square", "Go to town square", "Go to town square"],
+    "button functions": [goTown,goTown,goTown,],
+    text: "The monster screams Arg! as it dies. You gain experience points and find gold."
   }
 ]
 
@@ -145,17 +151,17 @@ function buyWeapon() {
 }
 
 function sellWeapon() {
-   if (inventory.length > 1) {
-     gold += 15;
-     goldText.innerText = gold;
-     let currentWeapon 
-     currentWeapon = inventory.shift();
-     text.innerText = "You sold your " + currentWeapon + ". " ;
-     text.innerText += " In your inventory you have: " + inventory;
-   }
-   else {
-     text.innerText = "Don't sell your only weapon!";
-   }
+  if (inventory.length > 1) {
+    gold += 15;
+    goldText.innerText = gold;
+    let currentWeapon
+    currentWeapon = inventory.shift();
+    text.innerText = "You sold your " + currentWeapon + ". ";
+    text.innerText += " In your inventory you have: " + inventory;
+  }
+  else {
+    text.innerText = "Don't sell your only weapon!";
+  }
 }
 
 
@@ -174,9 +180,9 @@ function update(location) {
 }
 
 function fightSlime() {
- fighting = 0;
- mosnter = ["slime"]
- goFight()
+  fighting = 0;
+  mosnter = ["slime"]
+  goFight()
 }
 
 function fightBeast() {
@@ -185,32 +191,32 @@ function fightBeast() {
   goFight()
 }
 
-function goFight(){
-update(locations[3]);
-monsterHealth = monsters[fighting].health;	
-monsterStats.style.display = 'block';
-monsterName.innerText = monsters[fighting].name;
+function goFight() {
+  update(locations[3]);
+  monsterHealth = monsters[fighting].health;
+  monsterStats.style.display = 'block';
+  monsterName.innerText = monsters[fighting].name;
 
-monsterHealthText.innerText = monsterHealth;
+  monsterHealthText.innerText = monsterHealth;
 }
 
 
-function attack(){
- 
-   text.innerText = "The " + monsters[fighting].name + " attacks.";
-   text.innerText += " You attack it with your " + weapons[currentWeaponIndex].name + ".";
-   health -= monsters[fighting].level;
-   monsterHealth -= weapons[currentWeaponIndex].power + Math.floor(Math.random() * xp) + 1;
-   healthText.innerText = health;
-   monsterHealthText.innerText = monsterHealth;
-   if (health <= 0) {
-     lose();
-   } else if (monsterHealth <= 0) {
-       defeatMonster();
-   }
- }
+function attack() {
 
-function dodge(){
+  text.innerText = "The " + monsters[fighting].name + " attacks.";
+  text.innerText += " You attack it with your " + weapons[currentWeaponIndex].name + ".";
+  health -= monsters[fighting].level;
+  monsterHealth -= weapons[currentWeaponIndex].power + Math.floor(Math.random() * xp) + 1;
+  healthText.innerText = health;
+  monsterHealthText.innerText = monsterHealth;
+  if (health <= 0) {
+    lose();
+  } else if (monsterHealth <= 0) {
+    defeatMonster();
+  }
+}
+
+function dodge() {
   text.innerText = "You dodge the attack from the  " + monsters[fighting].name + "'s attack.";
   text.innerText += " The monster attacks you with its " + weapons[currentWeaponIndex].name + ".";
   monsterHealth -= weapons[currentWeaponIndex].power + Math.floor(Math.random() * xp) + 1;
@@ -221,12 +227,15 @@ function dodge(){
 }
 
 
-function defeatMonster(){
+function defeatMonster() {
   gold += Math.floor(monsters[fighting].level * 6.7);
   xp += monsters[fighting].level;
+  goldText.innerText = gold;
+  xpText.innerText = xp;
+  update(locations[4]);
 }
 
-function lose(){
+function lose() {
   text.innerText = "You are defeated by the " + monsters[fighting].name + ".";
   monsterStats.style.display = 'none';
   goTown();
